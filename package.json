@@ -1,0 +1,19 @@
+{
+  "name": "Devaria_BackEnd_Node",
+  "version": "1.0.0",
+  "description": "Implementação de um sistema de gerenciamento de tarefas.",
+  "main": "index.js",
+  "dependencies": {
+    "express": "4.17.1",
+    "swagger-ui-express": "4.1.6"
+  },
+  "devDependencies": {
+    "nodemon": "2.0.7"
+  },
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
