@@ -15,15 +15,52 @@
         "/login": {
             "post": {
                 "sumary": "Faz uma requisição de acesso e retorna o login",
-                "response": {
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
                     "200": {
                         "schema": {
-                            "$ref": "#/definitions/LoginSucesso"
+                            "$ref": "#/definitions/LoginResponse200"
                         }
                     },
                     "400": {
                         "schema": {
-                            "$ref": "#/definitions/LoginInvalido"
+                            "$ref": "#/definitions/ResponseErro"
+                        }
+                    }
+                }
+            }
+        },
+        "/usuario": {
+            "post": {
+                "sumary": "Faz o cadastramento de um novo usuário no banco",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UsuarioCadastroRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/UsuarioCadastroResponse200"
+                        }
+                    },
+                    "400": {
+                        "schema": {
+                            "$ref": "#/definitions/ResponseErro"
                         }
                     }
                 }
@@ -31,25 +68,84 @@
         }
     },
     "definitions": {
-        "LoginSucesso": {
+        "LoginRequest": {
             "type": "object",
             "properties": {
-                "token": {
+                "login": {
                     "type": "string",
-                    "example": "asjdhasjdhgflkdsajgasçkjdgf"
+                    "example": "email@email.com"
+                },
+                "senha": {
+                    "type": "string",
+                    "example": "senha123456"
                 }
             }
         },
-        "LoginInvalido": {
+        "UsuarioCadastroRequest": {
+            "type": "object",
+            "properties": {
+                "nome": {
+                    "type": "string",
+                    "example": "Fulano Da Silva"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "email@email.com"
+                },
+                "senha": {
+                    "type": "string",
+                    "example": "senha123456"
+                }
+            }
+        },
+        "LoginResponse200": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "example": 1
+                },
+                "nome": {
+                    "type": "string",
+                    "example": "Fulano Da Silva"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "email@email.com"
+                },
+                "token": {
+                    "type": "string",
+                    "example": "fd8si7yhfdg8hfod9ihjgdfghd89"
+                }
+            }
+        },
+        "UsuarioCadastroResponse200": {
+            "type": "object",
+            "properties": {
+                "nome": {
+                    "type": "string",
+                    "example": "Fulano Da Silva"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "email@email.com"
+                },
+                "senha": {
+                    "type": "string",
+                    "example": "senha123456"
+                }
+            }
+        },
+        "ResponseErro": {
             "type": "object",
             "properties": {
                 "status": {
                     "type": "number",
-                    "example": "400"
+                    "example": 400
                 },
                 "erro": {
                     "type": "string",
-                    "example": "Parâmetros de entrada inválidos!"
+                    "example": "Parâmetros de entrada inválidos"
                 }
             }
         }
