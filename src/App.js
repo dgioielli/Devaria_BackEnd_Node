@@ -12,11 +12,13 @@ class App {
     // Método público para inicializar o servidor
     iniciar() {
         // Primeiro passo configurar o express
-        this.#configurarExpress();
+        //this.#configurarExpress();
         // Segundo passo Carregar os controllers
-        this.#carregarControllers();
+        //this.#carregarControllers();
         // Terceiro passo Iniciar o servidor.
-        this.#iniciarSevidor();
+        //this.#iniciarSevidor();
+
+        console.log(process.env.BASE_API_URL);
     }
 
     #configurarExpress = () => {

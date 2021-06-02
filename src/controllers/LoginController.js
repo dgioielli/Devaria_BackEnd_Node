@@ -1,4 +1,6 @@
+// Importações
 const HttpController = require("./HttpController");
+const LoginService = require("../services/LoginService");
 
 class LoginController extends HttpController {
     // Sobrescrevendo o método de HttpController
@@ -21,9 +23,10 @@ class LoginController extends HttpController {
             });
         }
 
-        res.json({
-            token: "tokenQualquer"
-        });
+        const service = new LoginService();
+        const resultado = service.logar(body.login, body.senha);
+
+        res.json(resultado);
     }
 }
 
