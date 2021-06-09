@@ -11,10 +11,11 @@ class LoginController extends HttpController {
         this.express.post(`${baseURL}/login`, this.login.bind(this));
     }
 
-    login(req, res) {
+    async login(req, res) {
         // Atribui o corpo da requisição para a variável "body"
         const body = req.body;
         // Executa a validação das informações do corpo da requisição.
+
         if (!body || !body.login || !body.senha) {
             req.logger.info('Requisição de login inválida!')
             // retorna um erropara quem chamou a API falando que os parâmetros estão inválidos.
@@ -24,12 +25,29 @@ class LoginController extends HttpController {
             });
         }
 
-        const service = new LoginService();
-        const resultado = service.logar(body.login, body.senha);
+        try {
+            const service = new LoginService();
+            const resultado = await service.logar(body.login.toString(), body.senha);
 
-        req.logger.info("Requisição de login realizada com sucesso", `Resultado=${JSON.stringify(resultado)}`);
+            if (!resultado) {
+                return res.status(400).json({
+                    status: 400,
+                    erro: "Login ou senha inválidos"
+                });
+            }
 
-        res.json(resultado);
+            req.logger.info("Requisição de login realizada com sucesso", `Resultado=${JSON.stringify(resultado)}`);
+
+            return res.json(resultado);
+
+        } catch (error) {
+            req.logger.error("Erro ao cadastrar usuário, error=", error.message);
+            return res.status(500).json({
+                status: 500,
+                erro: "Ocorreu um erro ao cadastrar o usuário, tento novamente!"
+            });
+        }
+
     }
 }
 

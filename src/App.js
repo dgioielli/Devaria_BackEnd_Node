@@ -7,6 +7,7 @@ const AppConstantes = require("./enum/AppConstantes");
 const logger = require("./middlewares/logger");
 const jwt = require("./middlewares/jwt");
 const UsuarioController = require("./controllers/UsuarioController");
+const MongoDBConnectionHelper = require('./helpers/MongoDBConnectionHelper');
 
 
 // volta para conseguir usar o arquivo .env certo.
@@ -20,6 +21,8 @@ class App {
     iniciar() {
         // Primeiro passo configurar o express
         this.#configurarExpress();
+        // Fazer a conexão com o banco de dados.
+        this.#configurarBancoDados();
         // Segundo passo Carregar os controllers
         this.#carregarControllers();
         // Terceiro passo Iniciar o servidor.
@@ -42,6 +45,10 @@ class App {
 
         // Configura o swagger da aplicação para servir a documentação
         this.express.use(`${AppConstantes.BASE_API_URL}/docs/`, swaggerUI.serve, swaggerUI.setup(swaggerFile));
+    }
+
+    #configurarBancoDados = () => {
+        MongoDBConnectionHelper.conectar();
     }
 
     #carregarControllers = () => {

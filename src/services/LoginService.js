@@ -1,17 +1,31 @@
 // Importações
 const jwt = require("jsonwebtoken");
+const UsuarioRepository = require('../repositories/impl/MongoDBUsuarioRepository');
+const md5 = require('md5');
 
 // volta para conseguir usar o arquivo .env certo.
 const fileEnv = require('dotenv').config().parsed;
 
 class LoginService {
-    logar(login, senha) {
+    async logar(login, senha) {
         // TODO: verificar se o usuário está cadastrado no banco de dados.
 
-        const usuario = {
-            id: 10,
-            nome: "usuário fake",
-            email: login
+        const filtro = {
+            email: login,
+            senha: md5(senha)
+        }
+
+        let usuario = null;
+        const usuarios = await UsuarioRepository.filtrar(filtro);
+
+        if (usuarios && usuarios.length) {
+            usuario = {
+                id: usuarios[0]._doc._id,
+                nome: usuarios[0]._doc.nome,
+                email: usuarios[0]._doc.email
+            };
+        } else {
+            return null;
         }
 
         // Gerar o token de acesso usando o JWT
