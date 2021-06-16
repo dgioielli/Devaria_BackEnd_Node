@@ -1,5 +1,6 @@
 // Importações
 const jwt = require("jsonwebtoken");
+const UsuarioRepository = require("../repositories/impl/MongoDBUsuarioRepository")
 
 // volta para conseguir usar o arquivo .env certo.
 const fileEnv = require('dotenv').config().parsed;
@@ -63,7 +64,7 @@ module.exports = (req, res, next) => {
     }
 
     // Verificar se o token é válido e foi gerado usando nossa chave secreta
-    jwt.verify(token, fileEnv.SECRET_KEY_JWT, (err, decodificado) => {
+    jwt.verify(token, fileEnv.SECRET_KEY_JWT, async (err, decodificado) => {
         if (err) {
             req.logger.error("Erro ao decodificar o token JWT", `Token=${token}`);
             return res.status(401).json({
@@ -73,8 +74,18 @@ module.exports = (req, res, next) => {
         }
         req.logger.debug("Token decodificado", `IdUsuário=${decodificado._id}`);
         // TODO: Carregar o usuário a partir do banco de dados
-        const usuario = {
-            id: decodificado._id
+        // const usuario = {
+        //     id: decodificado._id
+        // }
+
+        const usuario = await UsuarioRepository.buscarPorId(decodificado._id);
+        if (!usuario) {
+            req.error("Usuário não localizado!", `id=${decodificado._id}`);
+            return res.status(401).json({
+                status: 401,
+                erro: "Acesso negado, usuário não encontrado"
+            })
+
         }
 
         // Atribui a propriedade usuário da requisição, quem é o usuário autenticado

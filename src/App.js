@@ -8,6 +8,7 @@ const logger = require("./middlewares/logger");
 const jwt = require("./middlewares/jwt");
 const UsuarioController = require("./controllers/UsuarioController");
 const MongoDBConnectionHelper = require('./helpers/MongoDBConnectionHelper');
+const TarefaController = require("./controllers/TarefaController");
 
 
 // volta para conseguir usar o arquivo .env certo.
@@ -56,7 +57,8 @@ class App {
         // O sistema deve persistir a instância de express.
         this.#controllers = [
             new LoginController(this.express),
-            new UsuarioController(this.express)
+            new UsuarioController(this.express),
+            new TarefaController(this.express)
         ];
     }
 
